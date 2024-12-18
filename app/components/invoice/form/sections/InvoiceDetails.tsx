@@ -22,7 +22,7 @@ const InvoiceDetails = () => {
 
             <div className="flex flex-row flex-wrap gap-5">
                 <div className="flex flex-col gap-2">
-                    <FormFile
+                    {/* <FormFile
                         name="details.invoiceLogo"
                         label={_t(
                             "form.steps.invoiceDetails.invoiceLogo.label"
@@ -30,7 +30,7 @@ const InvoiceDetails = () => {
                         placeholder={_t(
                             "form.steps.invoiceDetails.invoiceLogo.placeholder"
                         )}
-                    />
+                    /> */}
 
                     <FormInput
                         name="details.invoiceNumber"
@@ -48,11 +48,11 @@ const InvoiceDetails = () => {
                         label={_t("form.steps.invoiceDetails.dueDate")}
                     />
 
-                    <CurrencySelector
+                    {/* <CurrencySelector
                         name="details.currency"
                         label={_t("form.steps.invoiceDetails.currency")}
                         placeholder="Select Currency"
-                    />
+                    /> */}
                 </div>
 
                 <div className="flex flex-col gap-2">

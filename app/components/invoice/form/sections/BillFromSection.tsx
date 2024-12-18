@@ -1,106 +1,94 @@
 "use client";
 
 // RHF
-import { useFieldArray, useFormContext } from "react-hook-form";
+import { useFormContext } from "react-hook-form";
+import { useEffect } from "react";
 
 // Components
-import {
-    BaseButton,
-    FormCustomInput,
-    FormInput,
-    Subheading,
-} from "@/app/components";
+import { FormInput, Subheading } from "@/app/components";
 
 // Contexts
 import { useTranslationContext } from "@/contexts/TranslationContext";
 
-// Icons
-import { Plus } from "lucide-react";
-
 const BillFromSection = () => {
-    const { control } = useFormContext();
+  const { setValue } = useFormContext();
 
-    const { _t } = useTranslationContext();
+  const { _t } = useTranslationContext();
 
-    const CUSTOM_INPUT_NAME = "sender.customInputs";
-    const { fields, append, remove } = useFieldArray({
-        control: control,
-        name: CUSTOM_INPUT_NAME,
-    });
+  // Pre-filled data
+  const prefilledData = {
+    sender: {
+      name: "Vital Force Technologies Pvt Ltd",
+      address:
+        "F st Floor Zoom Plaza Gorai Borivali (w) Below Maxus Cinema Mumbai ,Maharashtra India ",
+      zipCode: "400092",
+      city: "Mumbai",
+      email: "accounts@vftechpvtltd.com",
+      phone: "+91 8097760128",
+      gst: "27AAJCV9431E1Z3",
+      pan: "AAJCV9431E",
+    },
+  };
 
-    const addNewCustomInput = () => {
-        append({
-            key: "",
-            value: "",
-        });
-    };
+  useEffect(() => {
+    // Set pre-filled values for regular inputs
+    setValue("sender.name", prefilledData.sender.name);
+    setValue("sender.address", prefilledData.sender.address);
+    setValue("sender.zipCode", prefilledData.sender.zipCode);
+    setValue("sender.city", prefilledData.sender.city);
+    setValue("sender.email", prefilledData.sender.email);
+    setValue("sender.phone", prefilledData.sender.phone);
+    //Set pre filled values for GST and PAN
+    setValue("sender.gst", prefilledData.sender.gst);
+    setValue("sender.pan", prefilledData.sender.pan);
+  }, [setValue]);
 
-    const removeCustomInput = (index: number) => {
-        remove(index);
-    };
+  return (
+    <section className="flex flex-col gap-3">
+      <Subheading>{_t("form.steps.fromAndTo.billFrom")}:</Subheading>
 
-    return (
-        <section className="flex flex-col gap-3">
-            <Subheading>{_t("form.steps.fromAndTo.billFrom")}:</Subheading>
-
-            <FormInput
-                name="sender.name"
-                label={_t("form.steps.fromAndTo.name")}
-                placeholder="Your name"
-            />
-            <FormInput
-                name="sender.address"
-                label={_t("form.steps.fromAndTo.address")}
-                placeholder="Your address"
-            />
-            <FormInput
-                name="sender.zipCode"
-                label={_t("form.steps.fromAndTo.zipCode")}
-                placeholder="Your zip code"
-            />
-            <FormInput
-                name="sender.city"
-                label={_t("form.steps.fromAndTo.city")}
-                placeholder="Your city"
-            />
-            <FormInput
-                name="sender.country"
-                label={_t("form.steps.fromAndTo.country")}
-                placeholder="Your country"
-            />
-            <FormInput
-                name="sender.email"
-                label={_t("form.steps.fromAndTo.email")}
-                placeholder="Your email"
-            />
-            <FormInput
-                name="sender.phone"
-                label={_t("form.steps.fromAndTo.phone")}
-                placeholder="Your phone number"
-            />
-
-            {/* //? key = field.id fixes a bug where wrong field gets deleted  */}
-            {fields?.map((field, index) => (
-                <FormCustomInput
-                    key={field.id}
-                    index={index}
-                    location={CUSTOM_INPUT_NAME}
-                    removeField={removeCustomInput}
-                />
-            ))}
-
-            <BaseButton
-                tooltipLabel="Add custom input to sender"
-                size="sm"
-                variant="link"
-                className="w-fit"
-                onClick={addNewCustomInput}
-            >
-                <Plus />
-                {_t("form.steps.fromAndTo.addCustomInput")}
-            </BaseButton>
-        </section>
-    );
+      <FormInput
+        name="sender.name"
+        label={_t("form.steps.fromAndTo.name")}
+        placeholder="Your name"
+      />
+      <FormInput
+        name="sender.address"
+        label={_t("form.steps.fromAndTo.address")}
+        placeholder="Your address"
+      />
+      <FormInput
+        name="sender.zipCode"
+        label={_t("form.steps.fromAndTo.zipCode")}
+        placeholder="Your zip code"
+      />
+      <FormInput
+        name="sender.city"
+        label={_t("form.steps.fromAndTo.city")}
+        placeholder="Your city"
+      />
+      <FormInput
+        name="sender.email"
+        label={_t("form.steps.fromAndTo.email")}
+        placeholder="Your email"
+      />
+      <FormInput
+        name="sender.phone"
+        label={_t("form.steps.fromAndTo.phone")}
+        placeholder="Your phone number"
+      />
+      <FormInput
+        name="sender.gst"
+        label="GST"
+        placeholder="Your GST Number"
+      />
+      <FormInput
+        name="sender.pan"
+        label="PAN"
+        placeholder="Your PAN Number"
+      />
+    </section>
+  );
 };
 
 export default BillFromSection;

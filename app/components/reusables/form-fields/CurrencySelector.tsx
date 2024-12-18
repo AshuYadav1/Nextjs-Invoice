@@ -11,36 +11,18 @@ import {
     FormLabel,
     FormMessage,
 } from "@/components/ui/form";
-import {
-    Select,
-    SelectContent,
-    SelectGroup,
-    SelectItem,
-    SelectLabel,
-    SelectTrigger,
-    SelectValue,
-} from "@/components/ui/select";
-
-// Hooks
-import useCurrencies from "@/hooks/useCurrencies";
 
 // Types
-import { CurrencyType, NameType } from "@/types";
+import { NameType } from "@/types";
 
 type CurrencySelectorProps = {
     name: NameType;
     label?: string;
-    placeholder?: string;
+    placeholder?: string; // Added placeholder prop
 };
 
-const CurrencySelector = ({
-    name,
-    label,
-    placeholder,
-}: CurrencySelectorProps) => {
+const CurrencySelector = ({ name, label, placeholder }: CurrencySelectorProps) => {
     const { control } = useFormContext();
-
-    const { currencies, currenciesLoading } = useCurrencies();
 
     return (
         <div>
@@ -54,48 +36,19 @@ const CurrencySelector = ({
                                 <FormLabel>{label}:</FormLabel>
                             </div>
                             <div>
-                                <Select
+                                {/* Fixed INR Value */}
+                                <FormControl>
+                                    <div className="w-[13rem] bg-gray-100 px-4 py-2 rounded text-gray-500">
+                                        {placeholder || "INR (Indian Rupee)"}
+                                    </div>
+                                </FormControl>
+                                {/* Hidden input field to ensure "INR" is submitted */}
+                                <input
+                                    type="hidden"
                                     {...field}
-                                    defaultValue={field.value}
-                                    onValueChange={field.onChange}
-                                >
-                                    <FormControl>
-                                        <SelectTrigger className="w-[13rem]">
-                                            <SelectValue
-                                                placeholder={placeholder}
-                                            />
-                                        </SelectTrigger>
-                                    </FormControl>
-                                    <SelectContent
-                                        style={{
-                                            overflowY: "hidden",
-                                            height: "200px",
-                                        }}
-                                    >
-                                        <SelectGroup>
-                                            <SelectLabel>
-                                                Currencies
-                                            </SelectLabel>
-                                            {!currenciesLoading &&
-                                                currencies.map(
-                                                    (
-                                                        currency: CurrencyType,
-                                                        idx: number
-                                                    ) => (
-                                                        <SelectItem
-                                                            key={idx}
-                                                            value={
-                                                                currency.code
-                                                            }
-                                                        >
-                                                            {currency.name}{" "}
-                                                            {`(${currency.code})`}
-                                                        </SelectItem>
-                                                    )
-                                                )}
-                                        </SelectGroup>
-                                    </SelectContent>
-                                </Select>
+                                    value="INR"
+                                    onChange={field.onChange}
+                                />
                                 <FormMessage />
                             </div>
                         </div>

@@ -40,6 +40,18 @@ const fieldValidators = {
         .max(50, {
             message: "Must be between 1 and 50 characters",
         }),
+    Pan: z
+        .string()
+        .min(1, { message: "Must be between 1 and 16 characters" })
+        .max(50, {
+            message: "Must be between 1 and 16 characters",
+        }),
+    Gst: z
+        .string()
+        .min(1, { message: "Must be between 1 and 16 characters" })
+        .max(50, {
+            message: "Must be between 1 and 16 characters",
+        }),
 
     // Dates
     date: z
@@ -93,6 +105,8 @@ const InvoiceSenderSchema = z.object({
     country: fieldValidators.country,
     email: fieldValidators.email,
     phone: fieldValidators.phone,
+    Pan: fieldValidators.Pan,
+    Gst: fieldValidators.Gst,
     customInputs: z.array(CustomInputSchema).optional(),
 });
 

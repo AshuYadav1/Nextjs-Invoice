@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React from "react";
 
 // Components
@@ -13,20 +14,19 @@ import { DATE_OPTIONS } from "@/lib/variables";
 import { InvoiceType } from "@/types";
 
 const InvoiceTemplate = (data: InvoiceType) => {
+console.log(data)
     const { sender, receiver, details } = data;
-
     return (
         <InvoiceLayout data={data}>
             <div className="flex justify-between">
                 <div>
-                    {details.invoiceLogo && (
                         <img
-                            src={details.invoiceLogo}
+                            src={'/assets/img/logo.png'}
                             width={140}
                             height={100}
                             alt={`Logo of ${sender.name}`}
+                            className=" bg-black rounded-md"
                         />
-                    )}
                     <h1 className="mt-2 text-lg md:text-xl font-semibold text-blue-600">
                         {sender.name}
                     </h1>
@@ -270,6 +270,12 @@ const InvoiceTemplate = (data: InvoiceType) => {
                     </p>
                     <p className="block text-sm font-medium text-gray-800">
                         {sender.phone}
+                    </p>
+                    <p className="block text-sm font-medium text-gray-800">
+                        {sender.pan}
+                    </p>
+                    <p className="block text-sm font-medium text-gray-800">
+                        {sender.gst}
                     </p>
                 </div>
             </div>

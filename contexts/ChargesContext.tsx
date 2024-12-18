@@ -32,7 +32,7 @@ const defaultChargesContext = {
     setShippingType: (newValue: SetStateAction<string>) => {},
     totalInWordsSwitch: true,
     setTotalInWordsSwitch: (newValue: boolean) => {},
-    currency: "USD",
+    currency: "INR",
     subTotal: 0,
     totalAmount: 0,
     calculateTotal: () => {},
