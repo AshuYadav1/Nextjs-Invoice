@@ -21,7 +21,7 @@ console.log(data)
             <div className="flex justify-between">
                 <div>
                         <img
-                            src={'/assets/img/logo.png'}
+                            src={'https://firebasestorage.googleapis.com/v0/b/vegiwell-2.appspot.com/o/logo.png?alt=media&token=3c2c6b77-d120-413a-b128-bb0848b22285'}
                             width={140}
                             height={100}
                             alt={`Logo of ${sender.name}`}
@@ -244,20 +244,7 @@ console.log(data)
                         </p>
                     </div>
                     <div className="my-2">
-                        <span className="font-semibold text-md text-gray-800">
-                            Please send the payment to this address
-                            <p className="text-sm">
-                                Bank: {details.paymentInformation?.bankName}
-                            </p>
-                            <p className="text-sm">
-                                Account name:{" "}
-                                {details.paymentInformation?.accountName}
-                            </p>
-                            <p className="text-sm">
-                                Account no:{" "}
-                                {details.paymentInformation?.accountNumber}
-                            </p>
-                        </span>
+                        
                     </div>
                 </div>
                 <p className="text-gray-500 text-sm">

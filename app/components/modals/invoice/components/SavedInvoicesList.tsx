@@ -42,7 +42,7 @@ const SavedInvoicesList = ({ setModalState }: SavedInvoicesListProps) => {
         selected.details.dueDate = new Date(selected.details.dueDate);
         selected.details.invoiceDate = new Date(selected.details.invoiceDate);
 
-        selected.details.invoiceLogo = "";
+        selected.details.invoiceLogo = "https://firebasestorage.googleapis.com/v0/b/vegiwell-2.appspot.com/o/logo.png?alt=media&token=3c2c6b77-d120-413a-b128-bb0848b22285";
         selected.details.signature = {
             data: "",
         };

@@ -114,7 +114,7 @@ export {
     WizardNavigation,
     WizardStep,
     WizardProgress,
-    PaymentInformation,
+    
     InvoiceSummary,
     CurrencySelector,
     SavedInvoicesList,

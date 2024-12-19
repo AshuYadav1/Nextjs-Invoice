@@ -20,7 +20,7 @@ const BillFromSection = () => {
     sender: {
       name: "Vital Force Technologies Pvt Ltd",
       address:
-        "F st Floor Zoom Plaza Gorai Borivali (w) Below Maxus Cinema Mumbai ,Maharashtra India ",
+        "Maharashtra India ",
       zipCode: "400092",
       city: "Mumbai",
       email: "accounts@vftechpvtltd.com",

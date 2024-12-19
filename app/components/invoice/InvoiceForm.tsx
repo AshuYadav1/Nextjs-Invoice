@@ -25,7 +25,7 @@ import {
     BillToSection,
     InvoiceDetails,
     Items,
-    PaymentInformation,
+    
     InvoiceSummary,
 } from "@/app/components";
 
@@ -89,9 +89,7 @@ const InvoiceForm = () => {
                                 <Items />
                             </WizardStep>
 
-                            <WizardStep>
-                                <PaymentInformation />
-                            </WizardStep>
+                            
 
                             <WizardStep>
                                 <InvoiceSummary />

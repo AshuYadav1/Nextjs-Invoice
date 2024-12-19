@@ -25,11 +25,11 @@ const InvoiceTemplate2 = (data: InvoiceType) => {
                         {details.invoiceNumber}
                     </span>
                         <img
-                            src={'/assets/img/logo.png'}
+                            src={'https://firebasestorage.googleapis.com/v0/b/vegiwell-2.appspot.com/o/logo.png?alt=media&token=3c2c6b77-d120-413a-b128-bb0848b22285'}
                             width={140}
                             height={100}
                             alt={`Logo of ${sender.name}`}
-                            className=" bg-black rounded-md"
+                           
                         />
 
                     <h1 className="mt-2 text-lg md:text-xl font-semibold text-blue-600">
@@ -41,9 +41,9 @@ const InvoiceTemplate2 = (data: InvoiceType) => {
                         {sender.address}
                         <br />
                         {sender.zipCode}, {sender.city}
-                        <br />
+                        {/* <br />
                         {sender.country}
-                        <br />
+                        <br /> */}
                     </address>
                 </div>
             </div>
@@ -59,7 +59,7 @@ const InvoiceTemplate2 = (data: InvoiceType) => {
                     <address className="mt-2 not-italic text-gray-500">
                         {receiver.address}, {receiver.zipCode}
                         <br />
-                        {receiver.city}, {receiver.country}
+                        {/* {receiver.city}, {receiver.country} */}
                         <br />
                     </address>
                 </div>
@@ -243,7 +243,7 @@ const InvoiceTemplate2 = (data: InvoiceType) => {
                         </p>
                     </div>
                     <div className="my-2">
-                        <span className="font-semibold text-md text-gray-800">
+                        {/* <span className="font-semibold text-md text-gray-800">
                             Please send the payment to this address
                             <p className="text-sm">
                                 Bank: {details.paymentInformation?.bankName}
@@ -256,7 +256,7 @@ const InvoiceTemplate2 = (data: InvoiceType) => {
                                 Account no:{" "}
                                 {details.paymentInformation?.accountNumber}
                             </p>
-                        </span>
+                        </span> */}
                     </div>
                 </div>
                 <p className="text-gray-500 text-sm">

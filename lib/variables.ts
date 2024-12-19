@@ -110,6 +110,8 @@ export const SHORT_DATE_OPTIONS: Intl.DateTimeFormatOptions = {
 /**
  * Form defaults
  */
+
+
 export const FORM_DEFAULT_VALUES = {
     sender: {
         name: "",
@@ -132,7 +134,7 @@ export const FORM_DEFAULT_VALUES = {
         customInputs: [],
     },
     details: {
-        invoiceLogo: "",
+        invoiceLogo: "https://firebasestorage.googleapis.com/v0/b/vegiwell-2.appspot.com/o/logo.png?alt=media&token=3c2c6b77-d120-413a-b128-bb0848b22285",
         invoiceNumber: "",
         invoiceDate: "",
         dueDate: "",
@@ -196,7 +198,7 @@ export const FORM_FILL_VALUES = {
         phone: "987-654-3210",
     },
     details: {
-        invoiceLogo: "",
+        invoiceLogo: "https://firebasestorage.googleapis.com/v0/b/vegiwell-2.appspot.com/o/logo.png?alt=media&token=3c2c6b77-d120-413a-b128-bb0848b22285",
         invoiceNumber: "INV0001",
         invoiceDate: new Date(),
         dueDate: new Date(),

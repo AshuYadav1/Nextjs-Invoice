@@ -25,10 +25,10 @@ const fieldValidators = {
         .string()
         .min(1, { message: "Must be between 1 and 50 characters" })
         .max(50, { message: "Must be between 1 and 50 characters" }),
-    country: z
-        .string()
-        .min(1, { message: "Must be between 1 and 70 characters" })
-        .max(70, { message: "Must be between 1 and 70 characters" }),
+    // country: z
+    //     .string()
+    //     .min(1, { message: "Must be between 1 and 70 characters" })
+    //     .max(70, { message: "Must be between 1 and 70 characters" }),
     email: z
         .string()
         .email({ message: "Email must be a valid email" })
@@ -102,11 +102,11 @@ const InvoiceSenderSchema = z.object({
     address: fieldValidators.address,
     zipCode: fieldValidators.zipCode,
     city: fieldValidators.city,
-    country: fieldValidators.country,
+    // country: fieldValidators.country,
     email: fieldValidators.email,
     phone: fieldValidators.phone,
-    Pan: fieldValidators.Pan,
-    Gst: fieldValidators.Gst,
+    Pan: fieldValidators.Pan.optional(),
+    Gst: fieldValidators.Gst.optional(),
     customInputs: z.array(CustomInputSchema).optional(),
 });
 
@@ -115,9 +115,11 @@ const InvoiceReceiverSchema = z.object({
     address: fieldValidators.address,
     zipCode: fieldValidators.zipCode,
     city: fieldValidators.city,
-    country: fieldValidators.country,
+    // country: fieldValidators.country,
     email: fieldValidators.email,
     phone: fieldValidators.phone,
+    Pan: fieldValidators.Pan.optional(),
+    Gst: fieldValidators.Gst.optional(),
     customInputs: z.array(CustomInputSchema).optional(),
 });
 
@@ -129,11 +131,11 @@ const ItemSchema = z.object({
     total: fieldValidators.stringToNumber,
 });
 
-const PaymentInformationSchema = z.object({
-    bankName: fieldValidators.stringMin1,
-    accountName: fieldValidators.stringMin1,
-    accountNumber: fieldValidators.stringMin1,
-});
+// const PaymentInformationSchema = z.object({
+//     bankName: fieldValidators.stringMin1,
+//     accountName: fieldValidators.stringMin1,
+//     accountNumber: fieldValidators.stringMin1,
+// });
 
 const DiscountDetailsSchema = z.object({
     amount: fieldValidators.stringToNumberWithMax,
@@ -165,7 +167,7 @@ const InvoiceDetailsSchema = z.object({
     currency: fieldValidators.string,
     language: fieldValidators.string,
     items: z.array(ItemSchema),
-    paymentInformation: PaymentInformationSchema.optional(),
+    // paymentInformation: PaymentInformationSchema.optional(),
     taxDetails: TaxDetailsSchema.optional(),
     discountDetails: DiscountDetailsSchema.optional(),
     shippingDetails: ShippingDetailsSchema.optional(),
