@@ -44,7 +44,7 @@ const SavedInvoicesList = ({ setModalState }: SavedInvoicesListProps) => {
 
         selected.details.invoiceLogo = "https://firebasestorage.googleapis.com/v0/b/vegiwell-2.appspot.com/o/logo.png?alt=media&token=3c2c6b77-d120-413a-b128-bb0848b22285";
         selected.details.signature = {
-            data: "",
+            data: "https://firebasestorage.googleapis.com/v0/b/vegiwell-2.appspot.com/o/VFTech_Singnature_Blue.png?alt=media&token=cae543d1-7c74-4ab4-8cbf-0e243974648e",
         };
     };
 

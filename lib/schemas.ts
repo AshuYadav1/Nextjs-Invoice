@@ -9,6 +9,10 @@ import { DATE_OPTIONS } from "@/lib/variables";
 // TODO: Refactor some of the validators. Ex: name and zipCode or address and country have same rules
 // Field Validators
 const fieldValidators = {
+    company: z
+        .string()
+        .min(2, { message: "Must be at least 2 characters" })
+        .max(50, { message: "Must be at most 50 characters" }),
     name: z
         .string()
         .min(2, { message: "Must be at least 2 characters" })
@@ -16,7 +20,7 @@ const fieldValidators = {
     address: z
         .string()
         .min(2, { message: "Must be at least 2 characters" })
-        .max(70, { message: "Must be between 2 and 70 characters" }),
+        .max(300, { message: "Must be between 2 and 200 characters" }),
     zipCode: z
         .string()
         .min(2, { message: "Must be between 2 and 20 characters" })
@@ -47,6 +51,13 @@ const fieldValidators = {
             message: "Must be between 1 and 16 characters",
         }),
     Gst: z
+        .string()
+        .min(1, { message: "Must be between 1 and 16 characters" })
+        .max(50, {
+            message: "Must be between 1 and 16 characters",
+        }),
+
+    C_Gst: z
         .string()
         .min(1, { message: "Must be between 1 and 16 characters" })
         .max(50, {
@@ -98,6 +109,7 @@ const CustomInputSchema = z.object({
 });
 
 const InvoiceSenderSchema = z.object({
+    company: fieldValidators.company,
     name: fieldValidators.name,
     address: fieldValidators.address,
     zipCode: fieldValidators.zipCode,
@@ -105,8 +117,8 @@ const InvoiceSenderSchema = z.object({
     // country: fieldValidators.country,
     email: fieldValidators.email,
     phone: fieldValidators.phone,
-    Pan: fieldValidators.Pan.optional(),
-    Gst: fieldValidators.Gst.optional(),
+    pan: fieldValidators.Pan.optional(),
+    gst: fieldValidators.Gst.optional(),
     customInputs: z.array(CustomInputSchema).optional(),
 });
 
@@ -115,7 +127,7 @@ const InvoiceReceiverSchema = z.object({
     address: fieldValidators.address,
     zipCode: fieldValidators.zipCode,
     city: fieldValidators.city,
-    // country: fieldValidators.country,
+    CGST: fieldValidators.C_Gst,
     email: fieldValidators.email,
     phone: fieldValidators.phone,
     Pan: fieldValidators.Pan.optional(),

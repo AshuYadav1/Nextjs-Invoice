@@ -1,8 +1,6 @@
 "use client";
 
-import { useMemo } from "react";
-
-// RHF
+import { useMemo, useEffect, useState } from "react";
 import { useFormContext, useWatch } from "react-hook-form";
 
 // ShadCn
@@ -25,17 +23,18 @@ import {
     BillToSection,
     InvoiceDetails,
     Items,
-    
     InvoiceSummary,
 } from "@/app/components";
 
 // Contexts
 import { useTranslationContext } from "@/contexts/TranslationContext";
+import generateInvoiceNumber from "lib/Firebase/invoice"; // Import the invoice number generator
 
 const InvoiceForm = () => {
     const { _t } = useTranslationContext();
+    const { control, setValue } = useFormContext(); // Get setValue
+    const [loading, setLoading] = useState(true);
 
-    const { control } = useFormContext();
 
     // Get invoice number variable
     const invoiceNumber = useWatch({
@@ -49,7 +48,28 @@ const InvoiceForm = () => {
         } else {
             return _t("form.newInvBadge");
         }
-    }, [invoiceNumber]);
+    }, [invoiceNumber, _t]);
+
+    useEffect(() => {
+      const fetchAndSetInvoiceNumber = async () => {
+        try{
+          const newInvoiceNumber = await generateInvoiceNumber();
+          setValue("details.invoiceNumber", newInvoiceNumber);
+          
+        }catch (error){
+          console.error("Failed to fetch and set invoice number:", error);
+        }finally{
+          setLoading(false);
+        }
+      };
+      
+    fetchAndSetInvoiceNumber();
+    }, [setValue]);
+
+    if (loading) {
+        return <div>Loading Invoice form</div>; // Display a loading state
+    }
+    
 
     return (
         <div className={`xl:w-[55%]`}>
@@ -75,7 +95,6 @@ const InvoiceForm = () => {
                             <WizardStep>
                                 <div className="flex flex-wrap gap-x-20 gap-y-10">
                                     <BillFromSection />
-
                                     <BillToSection />
                                 </div>
                             </WizardStep>
@@ -84,13 +103,9 @@ const InvoiceForm = () => {
                                     <InvoiceDetails />
                                 </div>
                             </WizardStep>
-
                             <WizardStep>
                                 <Items />
                             </WizardStep>
-
-                            
-
                             <WizardStep>
                                 <InvoiceSummary />
                             </WizardStep>

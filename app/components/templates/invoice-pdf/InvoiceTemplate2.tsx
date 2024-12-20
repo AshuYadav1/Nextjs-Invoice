@@ -19,22 +19,35 @@ const InvoiceTemplate2 = (data: InvoiceType) => {
             <div className="flex justify-between">
                 <div>
                     <h2 className="text-2xl md:text-3xl font-semibold text-gray-800">
-                        Invoice #
+                        {sender.company} Invoice
                     </h2>
                     <span className="mt-1 block text-gray-500">
                         {details.invoiceNumber}
                     </span>
-                        <img
-                            src={'https://firebasestorage.googleapis.com/v0/b/vegiwell-2.appspot.com/o/logo.png?alt=media&token=3c2c6b77-d120-413a-b128-bb0848b22285'}
-                            width={140}
-                            height={100}
-                            alt={`Logo of ${sender.name}`}
-                           
-                        />
+                    <img
+                        src={'https://firebasestorage.googleapis.com/v0/b/vegiwell-2.appspot.com/o/logo.png?alt=media&token=3c2c6b77-d120-413a-b128-bb0848b22285'}
+                        width={140}
+                        height={100}
+                        alt={`Logo of ${sender.name}`}
+
+                    />
 
                     <h1 className="mt-2 text-lg md:text-xl font-semibold text-blue-600">
                         {sender.name}
                     </h1>
+                    <p className="block text-sm font-medium text-gray-800">
+                        {`PAN :${sender.pan}`}
+                    </p>
+                    <p className="block text-sm font-medium text-gray-800">
+                        {`GST  :${sender.gst}`}
+                    </p>
+
+                    <p className="block text-sm font-medium text-gray-800">
+                        {sender.email}
+                    </p>
+                    <p className="block text-sm font-medium text-gray-800">
+                        {sender.phone}
+                    </p>
                 </div>
                 <div className="text-right">
                     <address className="mt-4 not-italic text-gray-800">
@@ -57,10 +70,12 @@ const InvoiceTemplate2 = (data: InvoiceType) => {
                         {receiver.name}
                     </h3>
                     <address className="mt-2 not-italic text-gray-500">
-                        {receiver.address}, {receiver.zipCode}
-                        <br />
-                        {/* {receiver.city}, {receiver.country} */}
-                        <br />
+                        {receiver.address}<br />
+                        {receiver.zipCode}<br />
+                        {receiver.city}<br />
+                        {receiver.email}<br />
+                        {receiver.phone}<br />
+                        {receiver.CGST}
                     </address>
                 </div>
                 <div className="sm:text-right space-y-2">
@@ -162,7 +177,7 @@ const InvoiceTemplate2 = (data: InvoiceType) => {
                                     </dt>
                                     <dd className="col-span-2 text-gray-500">
                                         {details.discountDetails.amountType ===
-                                        "amount"
+                                            "amount"
                                             ? `- ${details.discountDetails.amount} ${details.currency}`
                                             : `- ${details.discountDetails.amount}%`}
                                     </dd>
@@ -176,7 +191,7 @@ const InvoiceTemplate2 = (data: InvoiceType) => {
                                     </dt>
                                     <dd className="col-span-2 text-gray-500">
                                         {details.taxDetails.amountType ===
-                                        "amount"
+                                            "amount"
                                             ? `+ ${details.taxDetails.amount} ${details.currency}`
                                             : `+ ${details.taxDetails.amount}%`}
                                     </dd>
@@ -190,7 +205,7 @@ const InvoiceTemplate2 = (data: InvoiceType) => {
                                     </dt>
                                     <dd className="col-span-2 text-gray-500">
                                         {details.shippingDetails.costType ===
-                                        "amount"
+                                            "amount"
                                             ? `+ ${details.shippingDetails.cost} ${details.currency}`
                                             : `+ ${details.shippingDetails.cost}%`}
                                     </dd>
@@ -263,7 +278,7 @@ const InvoiceTemplate2 = (data: InvoiceType) => {
                     If you have any questions concerning this invoice, use the
                     following contact information:
                 </p>
-                <div>
+                {/* <div>
                     <p className="block text-sm font-medium text-gray-800">
                         {sender.email}
                     </p>
@@ -276,35 +291,28 @@ const InvoiceTemplate2 = (data: InvoiceType) => {
                     <p className="block text-sm font-medium text-gray-800">
                         {sender.Gst}
                     </p>
-                </div>
+                </div> */}
             </div>
 
             {/* Signature */}
-            {details?.signature?.data && isDataUrl(details?.signature?.data) ? (
+            {/* Signature */}
+            {
+
+
                 <div className="mt-6">
                     <p className="font-semibold text-gray-800">Signature:</p>
                     <img
-                        src={details.signature.data}
+                        src="https://firebasestorage.googleapis.com/v0/b/vegiwell-2.appspot.com/o/VFTech_Singnature_Blue.png?alt=media&token=cae543d1-7c74-4ab4-8cbf-0e243974648e"
                         width={120}
                         height={60}
                         alt={`Signature of ${sender.name}`}
                     />
                 </div>
-            ) : details.signature?.data ? (
-                <div className="mt-6">
-                    <p className="text-gray-800">Signature:</p>
-                    <p
-                        style={{
-                            fontSize: 30,
-                            fontWeight: 400,
-                            fontFamily: `${details.signature.fontFamily}, cursive`,
-                            color: "black",
-                        }}
-                    >
-                        {details.signature.data}
-                    </p>
-                </div>
-            ) : null}
+
+
+            }
+
+
         </InvoiceLayout>
     );
 };

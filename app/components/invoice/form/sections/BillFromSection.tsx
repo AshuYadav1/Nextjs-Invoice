@@ -18,9 +18,11 @@ const BillFromSection = () => {
   // Pre-filled data
   const prefilledData = {
     sender: {
+      company:"",
       name: "Vital Force Technologies Pvt Ltd",
       address:
-        "Maharashtra India ",
+        "F-11, 1st Floor, Zoom Plaza, L.T Road, Gorai 2, Borivali (West), Mumbai , 400092 Landmark – Below Maxus Cinema. ",
+
       zipCode: "400092",
       city: "Mumbai",
       email: "accounts@vftechpvtltd.com",
@@ -32,6 +34,7 @@ const BillFromSection = () => {
 
   useEffect(() => {
     // Set pre-filled values for regular inputs
+    setValue("sender.company", prefilledData.sender.company);
     setValue("sender.name", prefilledData.sender.name);
     setValue("sender.address", prefilledData.sender.address);
     setValue("sender.zipCode", prefilledData.sender.zipCode);
@@ -46,6 +49,12 @@ const BillFromSection = () => {
   return (
     <section className="flex flex-col gap-3">
       <Subheading>{_t("form.steps.fromAndTo.billFrom")}:</Subheading>
+
+      <FormInput
+        name="sender.company"
+        label="Company Name"
+        placeholder="company name "
+      />
 
       <FormInput
         name="sender.name"

@@ -33,6 +33,7 @@ export default function PdfDashboard() {
                     result.items.map(async (item, index) => {
 
                         const metadata = await getMetadata(item)
+                        
                       const downloadUrl = await getDownloadURL(item);
                          return {
                             id:  `${index}`, // Use the item index as the id

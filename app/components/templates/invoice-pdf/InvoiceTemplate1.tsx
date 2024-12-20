@@ -14,26 +14,39 @@ import { DATE_OPTIONS } from "@/lib/variables";
 import { InvoiceType } from "@/types";
 
 const InvoiceTemplate = (data: InvoiceType) => {
-console.log(data)
+    console.log(data)
     const { sender, receiver, details } = data;
     return (
         <InvoiceLayout data={data}>
             <div className="flex justify-between">
                 <div>
-                        <img
-                            src={details.invoiceLogo || '/assets/img/logo.png'}
-                            width={140}
-                            height={100}
-                            alt={`Logo of ${sender.name}`}
-                            className=" bg-black rounded-md"
-                        />
+                    <img
+                        src={details.invoiceLogo || '/assets/img/logo.png'}
+                        width={140}
+                        height={100}
+                        alt={`Logo of ${sender.name}`}
+                        className=" bg-black rounded-md"
+                    />
                     <h1 className="mt-2 text-lg md:text-xl font-semibold text-blue-600">
                         {sender.name}
                     </h1>
+                    <p className="block text-sm font-medium text-gray-800">
+                        {`PAN :${sender.pan}`}
+                    </p>
+                    <p className="block text-sm font-medium text-gray-800">
+                        {`GST  :${sender.gst}`}
+                    </p>
+
+                    <p className="block text-sm font-medium text-gray-800">
+                        {sender.email}
+                    </p>
+                    <p className="block text-sm font-medium text-gray-800">
+                        {sender.phone}
+                    </p>
                 </div>
                 <div className="text-right">
                     <h2 className="text-2xl md:text-3xl font-semibold text-gray-800">
-                        Invoice #
+                        {sender.company} Invoice
                     </h2>
                     <span className="mt-1 block text-gray-500">
                         {details.invoiceNumber}
@@ -58,11 +71,14 @@ console.log(data)
                         {receiver.name}
                     </h3>
                     <address className="mt-2 not-italic text-gray-500">
-                        {receiver.address}, {receiver.zipCode}
-                        <br />
-                        {receiver.city}, {receiver.country}
-                        <br />
+                        {receiver.address}<br />
+                        {receiver.zipCode}<br />
+                        {receiver.city}<br />
+                        {receiver.email}<br />
+                        {receiver.phone}<br />
+                        {receiver.CGST}
                     </address>
+
                 </div>
                 <div className="sm:text-right space-y-2">
                     <div className="grid grid-cols-2 sm:grid-cols-1 gap-3 sm:gap-2">
@@ -163,7 +179,7 @@ console.log(data)
                                     </dt>
                                     <dd className="col-span-2 text-gray-500">
                                         {details.discountDetails.amountType ===
-                                        "amount"
+                                            "amount"
                                             ? `- ${details.discountDetails.amount} ${details.currency}`
                                             : `- ${details.discountDetails.amount}%`}
                                     </dd>
@@ -177,7 +193,7 @@ console.log(data)
                                     </dt>
                                     <dd className="col-span-2 text-gray-500">
                                         {details.taxDetails.amountType ===
-                                        "amount"
+                                            "amount"
                                             ? `+ ${details.taxDetails.amount} ${details.currency}`
                                             : `+ ${details.taxDetails.amount}%`}
                                     </dd>
@@ -191,7 +207,7 @@ console.log(data)
                                     </dt>
                                     <dd className="col-span-2 text-gray-500">
                                         {details.shippingDetails.costType ===
-                                        "amount"
+                                            "amount"
                                             ? `+ ${details.shippingDetails.cost} ${details.currency}`
                                             : `+ ${details.shippingDetails.cost}%`}
                                     </dd>
@@ -244,7 +260,7 @@ console.log(data)
                         </p>
                     </div>
                     <div className="my-2">
-                        <span className="font-semibold text-md text-gray-800">
+                        {/* <span className="font-semibold text-md text-gray-800">
                             Please send the payment to this address
                             <p className="text-sm">
                                 Bank: {details.paymentInformation?.bankName}
@@ -257,7 +273,7 @@ console.log(data)
                                 Account no:{" "}
                                 {details.paymentInformation?.accountNumber}
                             </p>
-                        </span>
+                        </span> */}
                     </div>
                 </div>
                 <p className="text-gray-500 text-sm">
@@ -265,47 +281,33 @@ console.log(data)
                     following contact information:
                 </p>
                 <div>
-                    <p className="block text-sm font-medium text-gray-800">
-                        {sender.email}
-                    </p>
-                    <p className="block text-sm font-medium text-gray-800">
-                        {sender.phone}
-                    </p>
-                    <p className="block text-sm font-medium text-gray-800">
+
+                    {/* <p className="block text-sm font-medium text-gray-800">
                         {sender.pan}
                     </p>
                     <p className="block text-sm font-medium text-gray-800">
                         {sender.gst}
-                    </p>
+                    </p> */}
                 </div>
             </div>
 
             {/* Signature */}
-            {details?.signature?.data && isDataUrl(details?.signature?.data) ? (
+            {
+
+
                 <div className="mt-6">
                     <p className="font-semibold text-gray-800">Signature:</p>
                     <img
-                        src={details.signature.data}
+                        src="https://firebasestorage.googleapis.com/v0/b/vegiwell-2.appspot.com/o/VFTech_Singnature_Blue.png?alt=media&token=cae543d1-7c74-4ab4-8cbf-0e243974648e"
                         width={120}
                         height={60}
                         alt={`Signature of ${sender.name}`}
                     />
                 </div>
-            ) : details.signature?.data ? (
-                <div className="mt-6">
-                    <p className="text-gray-800">Signature:</p>
-                    <p
-                        style={{
-                            fontSize: 30,
-                            fontWeight: 400,
-                            fontFamily: `${details.signature.fontFamily}, cursive`,
-                            color: "black",
-                        }}
-                    >
-                        {details.signature.data}
-                    </p>
-                </div>
-            ) : null}
+
+
+            }
+
         </InvoiceLayout>
     );
 };

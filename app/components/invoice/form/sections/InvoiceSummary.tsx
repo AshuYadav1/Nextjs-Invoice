@@ -22,7 +22,14 @@ const InvoiceSummary = () => {
                 <div className="flex flex-col gap-3">
                     <SignatureContextProvider>
                         {/* Signature dialog */}
-                        <SignatureModal />
+
+                        <img
+                                src="https://firebasestorage.googleapis.com/v0/b/vegiwell-2.appspot.com/o/VFTech_Singnature_Blue.png?alt=media&token=cae543d1-7c74-4ab4-8cbf-0e243974648e"
+                                width={120}
+                                height={60}
+                                alt={`Signature of `}
+                            />
+                       
                     </SignatureContextProvider>
 
                     {/* Additional notes & Payment terms */}

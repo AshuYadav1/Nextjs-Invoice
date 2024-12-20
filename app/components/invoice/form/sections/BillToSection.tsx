@@ -65,9 +65,9 @@ const BillToSection = () => {
                 placeholder="Receiver city"
             />
             <FormInput
-                name="receiver.country"
-                label={_t("form.steps.fromAndTo.country")}
-                placeholder="Receiver country"
+                name="receiver.CGST"
+                label={"GST"}
+                placeholder="Client GST"
             />
             <FormInput
                 name="receiver.email"
@@ -90,16 +90,7 @@ const BillToSection = () => {
                 />
             ))}
 
-            <BaseButton
-                tooltipLabel="Add custom input to receiver"
-                size="sm"
-                variant="link"
-                className="w-fit"
-                onClick={addNewCustomInput}
-            >
-                <Plus />
-                {_t("form.steps.fromAndTo.addCustomInput")}
-            </BaseButton>
+           
         </section>
     );
 };
