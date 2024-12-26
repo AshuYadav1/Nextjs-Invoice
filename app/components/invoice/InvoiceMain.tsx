@@ -16,11 +16,11 @@ import { useInvoiceContext } from "@/contexts/InvoiceContext";
 import { InvoiceType } from "@/types";
 
 const InvoiceMain = () => {
-    const { handleSubmit } = useFormContext<InvoiceType>();
+    const { handleSubmit, getValues } = useFormContext<InvoiceType>();
 
     // Get the needed values from invoice context
     const { onFormSubmit } = useInvoiceContext();
-
+    
     return (
         <>
             <Form {...useFormContext<InvoiceType>()}>

@@ -28,7 +28,11 @@ const Items = () => {
         description: `HSN/SAC: 9983\n\nMarketing Material:\n• 500 Visiting Cards\n• 500 Brochure\n• 1 Banner\n• 1 Standee\n• 1 Partner Authorised Certificate\n\nSample Products:\n• 1 pcs 9w Solar Street Light [AIO Module]\n• 2 pcs Solar Home Lightening System\n• 500w off-grid Kit [DIY]\n• 1 Set Solar Table Fan\n\nTrainings:\n• Online Training\n• Physical Training [Optional]`,
         quantity: 1,
         unitPrice: 140000, // 1,40,000
-        total: 140000     // 1,40,000
+        total: 140000 ,
+        gst : 18 ,
+        cgst:0,
+        sgst:0,
+        igst:0   // 1,40,000
     };
 
     const addNewField = () => {

@@ -141,6 +141,7 @@ const ItemSchema = z.object({
     quantity: fieldValidators.quantity,
     unitPrice: fieldValidators.unitPrice,
     total: fieldValidators.stringToNumber,
+    gst: fieldValidators.stringToNumber,
 });
 
 // const PaymentInformationSchema = z.object({

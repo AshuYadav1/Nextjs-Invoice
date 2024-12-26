@@ -44,7 +44,7 @@ const SingleItem = ({
     moveFieldDown,
     removeField,
 }: SingleItemProps) => {
-    const { control, setValue } = useFormContext();
+    const { control, setValue , getValues} = useFormContext();
 
     const { _t } = useTranslationContext();
 
@@ -64,10 +64,17 @@ const SingleItem = ({
         control,
     });
 
+
+   const gst = useWatch({
+        name: `${name}[${index}].gst`,
+        control,
+    });
+
     const total = useWatch({
         name: `${name}[${index}].total`,
         control,
     });
+
 
     // Currency
     const currency = useWatch({
@@ -75,13 +82,26 @@ const SingleItem = ({
         control,
     });
 
-    useEffect(() => {
+
+  useEffect(() => {
         // Calculate total when rate or quantity changes
-        if (rate != undefined && quantity != undefined) {
+          if (rate != undefined && quantity != undefined && gst != undefined) {
             const calculatedTotal = (rate * quantity).toFixed(2);
-            setValue(`${name}[${index}].total`, calculatedTotal);
+              //calculate gst
+           const gstAmount = (rate * quantity * gst) / 100;
+              //calculate grand total
+            const grandTotal = (Number(calculatedTotal) + Number(gstAmount)).toFixed(2);
+            setValue(`${name}[${index}].total`, String(grandTotal));
         }
-    }, [rate, quantity]);
+
+    }, [rate, quantity, gst, setValue, name, index]);
+
+     const handleGstChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+           const newGst = Number(parseFloat(e.target.value || '0'));
+           setValue(`${name}[${index}].gst`, Number(newGst));
+    };
+
+
 
     // DnD
     const {
@@ -105,7 +125,7 @@ const SingleItem = ({
     const gripDragClasses = isDragging
         ? "opacity-0 group-hover:opacity-100 transition-opacity cursor-grabbing"
         : "cursor-grab";
-
+console.log(getValues())
     return (
         <div
             style={style}
@@ -183,15 +203,24 @@ const SingleItem = ({
                     vertical
                 />
 
+                <FormInput
+                    name={`${name}[${index}].gst`}
+                    type="number"
+                    label="GST (%)"
+                    placeholder="GST (%)"
+                    className="w-[8rem]"
+                    vertical
+                    onChange={handleGstChange}
+                />
                 <div className="flex flex-col gap-2">
                     <div>
                         <Label>{_t("form.steps.lineItems.total")}</Label>
                     </div>
                     <Input
-                        value={`${total} ${currency}`}
+                       value={`${total ?? ""} ${currency ?? ""}`}
                         readOnly
                         placeholder="Item total"
-                        className="border-none font-medium text-lg bg-transparent"
+                         className="border-none font-medium text-lg bg-transparent"
                         size={10}
                     />
                 </div>

@@ -35,9 +35,9 @@ class DatabaseService {
 }
 
 export async function generatePdfService(req: NextRequest) {
-    const body: InvoiceType = await req.json();
+    let body: InvoiceType = await req.json();
     let browser;
-
+    
     try {
         const ReactDOMServer = (await import("react-dom/server")).default;
 
@@ -47,7 +47,7 @@ export async function generatePdfService(req: NextRequest) {
         const htmlTemplate = ReactDOMServer.renderToStaticMarkup(
             InvoiceTemplate(body)
         );
-
+        
         // Browser launch logic remains the same
         if (ENV === "production") {
             const puppeteer = await import("puppeteer-core");

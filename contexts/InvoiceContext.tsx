@@ -117,10 +117,6 @@ export const InvoiceContextProvider = ({
    * @param {InvoiceType} data - The form values used to generate the PDF.
    */
   const onFormSubmit = (data: InvoiceType) => {
-    console.log("VALUE");
-    console.log(data);
-
-    // Call generate pdf method
     generatePdf(data);
   };
 
@@ -146,7 +142,7 @@ export const InvoiceContextProvider = ({
    */
   const generatePdf = useCallback(async (data: InvoiceType) => {
     setInvoicePdfLoading(true);
-
+    console.log(data.details.items[0])
     try {
       const response = await fetch(GENERATE_PDF_API, {
         method: "POST",

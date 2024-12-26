@@ -30,7 +30,7 @@ const DynamicInvoiceTemplate = (props: InvoiceType) => {
             ),
         [templateName]
     );
-
+    
     return <DynamicInvoice {...props} />;
 };
 
