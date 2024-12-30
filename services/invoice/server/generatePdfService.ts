@@ -33,14 +33,14 @@ export async function generatePdfService(req: NextRequest) {
     let body: InvoiceType;
 
     try {
-         body = await req.json();
-         const ReactDOMServer = (await import("react-dom/server")).default;
+        body = await req.json();
+        const ReactDOMServer = (await import("react-dom/server")).default;
 
-         const templateId = body.details.pdfTemplate;
-         const InvoiceTemplate = await getInvoiceTemplate(templateId);
-         const htmlTemplate = ReactDOMServer.renderToStaticMarkup(
-             InvoiceTemplate(body)
-         );
+        const templateId = body.details.pdfTemplate;
+        const InvoiceTemplate = await getInvoiceTemplate(templateId);
+        const htmlTemplate = ReactDOMServer.renderToStaticMarkup(
+            InvoiceTemplate(body)
+        );
 
 
         // Launch browser
@@ -68,23 +68,22 @@ export async function generatePdfService(req: NextRequest) {
         const page = await browser.newPage();
 
 
-         await page.setContent(await htmlTemplate, {
-             waitUntil: "networkidle0",
-         });
+        await page.setContent(await htmlTemplate, {
+            waitUntil: "networkidle0",
+        });
 
-         await page.addStyleTag({
+        await page.addStyleTag({
             url: TAILWIND_CDN,
         });
 
-         // Generate the PDF
-        const pdf = await page.pdf({
+        // Generate the PDF
+        const pdf: Buffer = await page.pdf({
             format: "a4",
             printBackground: true,
         });
 
-
-         // Prepare database entry
-         const invoiceDatabaseEntry: InvoiceDatabaseEntry = {
+        // Prepare database entry
+        const invoiceDatabaseEntry: InvoiceDatabaseEntry = {
             invoiceNumber: body.details.invoiceNumber,
             pdfContent: pdf,
             filename: `invoice-${body.details.invoiceNumber}.pdf`,
@@ -98,16 +97,19 @@ export async function generatePdfService(req: NextRequest) {
         // Save PDF to database
         await DatabaseService.saveInvoicePdf(invoiceDatabaseEntry);
 
+
         const pdfBlob = new Blob([pdf], { type: "application/pdf" });
+        const pdfStream = pdfBlob.stream();
 
 
-        const response = new NextResponse(pdfBlob, {
-            headers: {
-                "Content-Type": "application/pdf",
-                "Content-Disposition": `inline; filename=${invoiceDatabaseEntry.filename}`,
-            },
-             status: 200,
+        const response =  new NextResponse(pdfStream, {
+                headers: {
+                    "Content-Type": "application/pdf",
+                    "Content-Disposition": `inline; filename=${invoiceDatabaseEntry.filename}`,
+                },
+                status: 200,
         });
+
         return response;
 
     } catch (error) {
@@ -118,15 +120,15 @@ export async function generatePdfService(req: NextRequest) {
     } finally {
         // Ensure browser and page close gracefully, even if an error occurred
         if (browser) {
-            try{
-               for (const page of await browser.pages()) {
-                   await page.close();
-               }
-                 await browser.close();
-           }
-           catch (closeError){
-                 console.error("error closing browser")
-           }
+            try {
+                for (const page of await browser.pages()) {
+                    await page.close();
+                }
+                await browser.close();
+            }
+            catch (closeError) {
+                console.error("error closing browser")
+            }
 
         }
     }
