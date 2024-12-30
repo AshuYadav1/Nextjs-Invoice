@@ -1,26 +1,33 @@
 import { NextRequest, NextResponse } from "next/server";
 import chromium from "@sparticuz/chromium";
 import { getInvoiceTemplate } from "@/lib/helpers";
-import { CHROMIUM_EXECUTABLE_PATH, ENV, TAILWIND_CDN } from "@/lib/variables";
+import { ENV, TAILWIND_CDN } from "@/lib/variables";
 import { InvoiceType } from "@/types";
+import ReactDOMServer from "react-dom/server"; //Import once
 
-// Database interface - (same as in your code)
+// Create a database interface that matches your existing types
 interface InvoiceDatabaseEntry {
-    id?: string;
+    id?: string; // Optional ID for database record
     invoiceNumber: string;
     pdfContent: Buffer;
     filename: string;
     createdAt: Date;
+    
+    // Extract relevant details from the invoice
     senderName: string;
     receiverName: string;
     totalAmount: number;
     currency: string;
 }
 
+// Mock database service (replace with your actual database logic)
 class DatabaseService {
-    // (Same as in your code)
     static async saveInvoicePdf(invoiceData: InvoiceDatabaseEntry) {
+        // Placeholder for actual database save logic
+        // This could be Prisma, MongoDB, PostgreSQL, etc.
         console.log('Saving invoice PDF to database:', invoiceData);
+        
+        // Simulate database save - return a mock ID
         return {
             id: `invoice-${Date.now()}`,
             ...invoiceData
@@ -28,50 +35,65 @@ class DatabaseService {
     }
 }
 
-export async function generatePdfService(req: NextRequest) {
+// Function to launch browser correctly in prod and dev
+async function launchBrowser() {
     let browser;
-    let body: InvoiceType;
 
-    try {
-        body = await req.json();
-        const ReactDOMServer = (await import("react-dom/server")).default;
-
-        const templateId = body.details.pdfTemplate;
-        const InvoiceTemplate = await getInvoiceTemplate(templateId);
-        const htmlTemplate = ReactDOMServer.renderToStaticMarkup(
-            InvoiceTemplate(body)
-        );
-
-
-        // Launch browser
-        if (ENV === "production") {
-            const puppeteer = await import("puppeteer-core");
+    if (ENV === "production") {
+        const puppeteer = await import("puppeteer-core");
+        
             browser = await puppeteer.launch({
                 args: chromium.args,
                 defaultViewport: chromium.defaultViewport,
-                executablePath: await chromium.executablePath(
-                    CHROMIUM_EXECUTABLE_PATH
-                ),
+                executablePath: await chromium.executablePath(), // Ensure you are using the correct function
                 headless: true,
                 ignoreHTTPSErrors: true,
             });
-        } else if (ENV === "development") {
-            const puppeteer = await import("puppeteer");
+     } else {
+        const puppeteer = await import("puppeteer");
+       
             browser = await puppeteer.launch({
                 args: ["--no-sandbox", "--disable-setuid-sandbox"],
                 headless: "new",
             });
-        }
+    }
+
+    if (!browser) {
+        throw new Error("Failed to launch browser");
+    }
+
+    return browser;
+}
+
+
+
+export async function generatePdfService(req: NextRequest) {
+    let body: InvoiceType = await req.json();
+    let browser;
+
+    try {
+        const templateId = body.details.pdfTemplate;
+        const InvoiceTemplate = await getInvoiceTemplate(templateId);
+
+        const htmlTemplate = ReactDOMServer.renderToStaticMarkup(
+            InvoiceTemplate(body)
+        );
+        
+        // Browser launch logic remains the same
+        browser = await launchBrowser();
+
         if (!browser) {
             throw new Error("Failed to launch browser");
         }
+
         const page = await browser.newPage();
 
-
-        await page.setContent(await htmlTemplate, {
+        // Set the HTML content of the page
+        await page.setContent(htmlTemplate, {
             waitUntil: "networkidle0",
         });
 
+        // Add Tailwind CSS
         await page.addStyleTag({
             url: TAILWIND_CDN,
         });
@@ -81,6 +103,12 @@ export async function generatePdfService(req: NextRequest) {
             format: "a4",
             printBackground: true,
         });
+
+        // Close browser pages and browser
+        for (const page of await browser.pages()) {
+            await page.close();
+        }
+        await browser.close();
 
         // Prepare database entry
         const invoiceDatabaseEntry: InvoiceDatabaseEntry = {
@@ -95,41 +123,30 @@ export async function generatePdfService(req: NextRequest) {
         };
 
         // Save PDF to database
-        await DatabaseService.saveInvoicePdf(invoiceDatabaseEntry);
+        const savedInvoice = await DatabaseService.saveInvoicePdf(invoiceDatabaseEntry);
 
-
+        // Create a Blob from the PDF data
         const pdfBlob = new Blob([pdf], { type: "application/pdf" });
-        const pdfStream = pdfBlob.stream();
 
-
-        const response =  new NextResponse(pdfStream, {
-                headers: {
-                    "Content-Type": "application/pdf",
-                    "Content-Disposition": `inline; filename=${invoiceDatabaseEntry.filename}`,
-                },
-                status: 200,
+        const response = new NextResponse(pdfBlob, {
+            headers: {
+                "Content-Type": "application/pdf",
+                "Content-Disposition": `inline; filename=${invoiceDatabaseEntry.filename}`,
+            },
+            status: 200,
         });
 
         return response;
-
     } catch (error) {
-        console.error("Error generating PDF:", error);
-        return new NextResponse(`Error generating PDF: ${error}`, {
+        console.error(error);
+
+        // Return an error response
+        return new NextResponse(`Error generating PDF: \n${error}`, {
             status: 500,
         });
     } finally {
-        // Ensure browser and page close gracefully, even if an error occurred
         if (browser) {
-            try {
-                for (const page of await browser.pages()) {
-                    await page.close();
-                }
-                await browser.close();
-            }
-            catch (closeError) {
-                console.error("error closing browser")
-            }
-
+             await browser.close();
         }
     }
 }
