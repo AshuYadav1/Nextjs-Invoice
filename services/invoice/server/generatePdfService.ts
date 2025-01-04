@@ -1,13 +1,11 @@
-import { NextRequest, NextResponse } from "next/server";
 import chromium from "@sparticuz/chromium";
-import { getInvoiceTemplate } from "@/lib/helpers";
 import { ENV, TAILWIND_CDN } from "@/lib/variables";
-import { InvoiceType } from "@/types";
-import ReactDOMServer from "react-dom/server"; //Import once
+import { NextRequest, NextResponse } from "next/server";
+import { InvoiceType } from "@/types"; // Import InvoiceType
 
 // Create a database interface that matches your existing types
 interface InvoiceDatabaseEntry {
-    id?: string; // Optional ID for database record
+    id?: string;
     invoiceNumber: string;
     pdfContent: Buffer;
     filename: string;
@@ -45,13 +43,13 @@ async function launchBrowser() {
             browser = await puppeteer.launch({
                 args: chromium.args,
                 defaultViewport: chromium.defaultViewport,
-                executablePath: await chromium.executablePath(), // Ensure you are using the correct function
+                executablePath: await chromium.executablePath(),
                 headless: true,
                 ignoreHTTPSErrors: true,
             });
-     } else {
+    } else {
         const puppeteer = await import("puppeteer");
-       
+    
             browser = await puppeteer.launch({
                 args: ["--no-sandbox", "--disable-setuid-sandbox"],
                 headless: "new",
@@ -65,19 +63,11 @@ async function launchBrowser() {
     return browser;
 }
 
-
-
-export async function generatePdfService(req: NextRequest) {
-    let body: InvoiceType = await req.json();
+export async function generatePdfService(htmlTemplate: string, body: InvoiceType) { //  added InvoiceType here
     let browser;
 
     try {
-        const templateId = body.details.pdfTemplate;
-        const InvoiceTemplate = await getInvoiceTemplate(templateId);
 
-        const htmlTemplate = ReactDOMServer.renderToStaticMarkup(
-            InvoiceTemplate(body)
-        );
         
         // Browser launch logic remains the same
         browser = await launchBrowser();
@@ -118,10 +108,10 @@ export async function generatePdfService(req: NextRequest) {
             createdAt: new Date(),
             senderName: body.sender.name,
             receiverName: body.receiver.name,
-            totalAmount: body.details.items.reduce((sum, item) => sum + item.total, 0),
+            totalAmount: body.details.items.reduce((sum, item: InvoiceType['details']['items'][number]) => sum + item.total, 0 as number),
             currency: body.details.currency
         };
-
+    
         // Save PDF to database
         const savedInvoice = await DatabaseService.saveInvoicePdf(invoiceDatabaseEntry);
 

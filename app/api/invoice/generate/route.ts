@@ -1,9 +1,18 @@
 import { NextRequest } from "next/server";
-
-// Services
 import { generatePdfService } from "@/services/invoice/server/generatePdfService";
+import { getInvoiceTemplate } from "@/lib/helpers";
+import { InvoiceType } from "@/types";
+import ReactDOMServer from "react-dom/server";
 
 export async function POST(req: NextRequest) {
-    const result = await generatePdfService(req);
+    let body: InvoiceType = await req.json();
+    const templateId = body.details.pdfTemplate;
+    const InvoiceTemplate = await getInvoiceTemplate(templateId);
+
+    const htmlTemplate = ReactDOMServer.renderToStaticMarkup(
+        InvoiceTemplate(body)
+    );
+
+    const result = await generatePdfService(htmlTemplate, body);
     return result;
 }
